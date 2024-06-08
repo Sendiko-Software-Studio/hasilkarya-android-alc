@@ -24,7 +24,7 @@ import com.system.alecsys.material.data.PostMaterialLogRequest
 import com.system.alecsys.material.data.PostMaterialRequest
 import com.system.alecsys.material.data.PostMaterialResponse
 import com.system.alecsys.material.data.PostToLogResponse
-import com.system.alecsys.truck_fuel.data.TruckFuelLogRequest
+import com.system.alecsys.truck_fuel.data.TruckFuelConsumptionRequest
 import com.system.alecsys.truck_fuel.data.TruckFuelLogResponse
 import com.system.alecsys.truck_fuel.data.TruckFuelRequest
 import com.system.alecsys.truck_fuel.data.TruckFuelResponse
@@ -116,9 +116,9 @@ class DashboardScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            connectionObserver.observe().collect{ status ->
-                _token.collect{ token ->
-                    checkToken(token = "Bearer$token", connectionStatus = status)
+            connectionObserver.observe().collect { status ->
+                _token.collect { token ->
+                    checkToken(token = "Bearer $token", connectionStatus = status)
                 }
             }
         }
@@ -360,7 +360,7 @@ class DashboardScreenViewModel @Inject constructor(
         val data = TruckFuelRequest(
             truckId = fuelTruckEntity.truckId,
             driverId = fuelTruckEntity.driverId,
-            stationId = fuelTruckEntity.stationId,
+            fuelStationId = fuelTruckEntity.stationId,
             volume = fuelTruckEntity.volume,
             odometer = fuelTruckEntity.odometer,
             fuelOperatorId = fuelTruckEntity.userId,
@@ -436,10 +436,10 @@ class DashboardScreenViewModel @Inject constructor(
             if (!isStationValid(token, fuelTruckEntity.stationId))
                 message += "Station ID is not valid."
 
-            val data = TruckFuelLogRequest(
+            val data = TruckFuelConsumptionRequest(
                 truckId = fuelTruckEntity.truckId,
                 driverId = fuelTruckEntity.driverId,
-                stationId = fuelTruckEntity.stationId,
+                fuelStationId = fuelTruckEntity.stationId,
                 volume = fuelTruckEntity.volume,
                 odometer = fuelTruckEntity.odometer,
                 fuelOperatorId = fuelTruckEntity.userId,
@@ -494,7 +494,7 @@ class DashboardScreenViewModel @Inject constructor(
         val data = HeavyVehicleFuelRequest(
             heavyVehicleId = heavyVehicleEntity.heavyVehicleId,
             driverId = heavyVehicleEntity.driverId,
-            stationId = heavyVehicleEntity.stationId,
+            fuelStationId = heavyVehicleEntity.stationId,
             fuelOperatorId = heavyVehicleEntity.gasOperatorId,
             volume = heavyVehicleEntity.volume,
             hourmeter = heavyVehicleEntity.hourmeter,
