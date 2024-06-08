@@ -82,7 +82,7 @@ interface ApiServices {
         @Body truckFuelRequest: TruckFuelRequest
     ): Call<TruckFuelResponse>
 
-    @POST("gas-operator/fuel-log-error-log/truck/store")
+    @POST("fuel-consumption/truck")
     fun postFuelLog(
         @Header("Authorization") token: String,
         @Body truckFuelLogRequest: TruckFuelLogRequest
@@ -94,7 +94,7 @@ interface ApiServices {
         @Body heavyVehicleFuelRequest: HeavyVehicleFuelRequest
     ): Call<HeavyVehicleFuelResponse>
 
-    @POST("gas-operator/fuel-log-error-log/heavy-vehicle/store")
+    @POST("fuel-consumption/heavy-vehicle")
     fun postFuelHeavyVehicleLog(
         @Header("Authorization") token: String,
         @Body heavyVehicleLogRequest: HeavyVehicleFuelLogRequest
