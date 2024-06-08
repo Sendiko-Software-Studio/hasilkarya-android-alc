@@ -58,7 +58,6 @@ fun MenuCard(
                 Icon(
                     painter = icon,
                     contentDescription = text,
-                    modifier = Modifier.size(128.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -66,7 +65,6 @@ fun MenuCard(
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
                     fontFamily = poppinsFont,
-                    modifier = Modifier.width(128.dp)
                 )
             }
         }
