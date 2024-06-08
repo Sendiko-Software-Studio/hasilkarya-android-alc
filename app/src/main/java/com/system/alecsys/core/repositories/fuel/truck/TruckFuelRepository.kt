@@ -3,7 +3,7 @@ package com.system.alecsys.core.repositories.fuel.truck
 import com.system.alecsys.core.entities.FuelTruckEntity
 import com.system.alecsys.core.network.ApiServices
 import com.system.alecsys.core.preferences.AppPreferences
-import com.system.alecsys.truck_fuel.data.TruckFuelLogRequest
+import com.system.alecsys.truck_fuel.data.TruckFuelConsumptionRequest
 import com.system.alecsys.truck_fuel.data.TruckFuelRequest
 import javax.inject.Inject
 
@@ -22,5 +22,5 @@ class TruckFuelRepository @Inject constructor(
     fun checkDriverId(token: String, driverId: String) = apiServices.checkDriverId(driverId, token)
     fun checkTruckId(token: String, truckId: String) = apiServices.checkTruckId(truckId, token)
     fun checkStationId(token: String, stationId: String) = apiServices.checkGasStationId(stationId, token)
-    fun postToLog(token: String, truckFuelRequest: TruckFuelLogRequest) = apiServices.postFuelLog(token, truckFuelRequest)
+    fun postToLog(token: String, truckFuelRequest: TruckFuelConsumptionRequest) = apiServices.postFuelLog(token, truckFuelRequest)
 }
