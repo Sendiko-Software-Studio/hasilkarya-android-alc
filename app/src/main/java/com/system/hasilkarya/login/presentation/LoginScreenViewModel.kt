@@ -84,7 +84,11 @@ class LoginScreenViewModel @Inject constructor(
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    _state.update { it.copy(isLoading = false) }
+                    _state.update { it.copy(
+                        isLoading = false,
+                        isRequestFailed = FailedRequest(true),
+                        notificationMessage = "Ups ada kesalahan! Mohon tunggu beberapa waktu"
+                    ) }
                 }
 
             }

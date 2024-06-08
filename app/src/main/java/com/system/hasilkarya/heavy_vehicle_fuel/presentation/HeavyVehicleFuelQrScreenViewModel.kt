@@ -208,7 +208,7 @@ class HeavyVehicleFuelQrScreenViewModel @Inject constructor(
             heavyVehicleId = heavyVehicleEntity.heavyVehicleId,
             driverId = heavyVehicleEntity.driverId,
             stationId = heavyVehicleEntity.stationId,
-            gasOperatorId = heavyVehicleEntity.gasOperatorId,
+            fuelOperatorId = heavyVehicleEntity.gasOperatorId,
             volume = heavyVehicleEntity.volume,
             hourmeter = heavyVehicleEntity.hourmeter,
             remarks = heavyVehicleEntity.remarks,

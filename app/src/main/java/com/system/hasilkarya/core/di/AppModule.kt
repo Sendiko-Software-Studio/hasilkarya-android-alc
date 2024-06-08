@@ -61,7 +61,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api-system.hasilkarya.co.id/api/v1/")
+            .baseUrl("http://api-alecsys.hasilkarya.co.id/api/v1/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
