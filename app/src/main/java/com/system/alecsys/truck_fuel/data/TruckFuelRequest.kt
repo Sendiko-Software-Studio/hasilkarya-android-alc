@@ -16,8 +16,8 @@ data class TruckFuelRequest(
 	@field:SerializedName("odometer")
 	val odometer: Any,
 
-	@field:SerializedName("station_id")
-	val stationId: String,
+	@field:SerializedName("fuel_station_id")
+	val fuelStationId: String,
 
 	@field:SerializedName("fuel_operator_id")
 	val fuelOperatorId: String,

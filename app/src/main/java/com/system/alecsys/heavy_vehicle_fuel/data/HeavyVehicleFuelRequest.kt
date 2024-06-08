@@ -13,8 +13,8 @@ data class HeavyVehicleFuelRequest(
 	@field:SerializedName("hourmeter")
 	val hourmeter: Any,
 
-	@field:SerializedName("station_id")
-	val stationId: String,
+	@field:SerializedName("fuel_station_id")
+	val fuelStationId: String,
 
 	@field:SerializedName("fuel_operator_id")
 	val fuelOperatorId: String,

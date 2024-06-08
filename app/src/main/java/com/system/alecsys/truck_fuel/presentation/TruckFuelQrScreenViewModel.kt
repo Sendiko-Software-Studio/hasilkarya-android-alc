@@ -192,7 +192,7 @@ class TruckFuelQrScreenViewModel @Inject constructor(
         val data = TruckFuelRequest(
             truckId = fuelTruckEntity.truckId,
             driverId = fuelTruckEntity.driverId,
-            stationId = fuelTruckEntity.stationId,
+            fuelStationId = fuelTruckEntity.stationId,
             volume = fuelTruckEntity.volume,
             odometer = fuelTruckEntity.odometer,
             fuelOperatorId = fuelTruckEntity.userId,
@@ -347,7 +347,6 @@ class TruckFuelQrScreenViewModel @Inject constructor(
     }
 
     // event handler
-    @RequiresApi(Build.VERSION_CODES.O)
     fun onEvent(event: TruckFuelQrScreenEvent) {
         when (event) {
             TruckFuelQrScreenEvent.NotificationClear -> onClearNotification()

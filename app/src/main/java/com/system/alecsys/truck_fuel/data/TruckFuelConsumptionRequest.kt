@@ -2,7 +2,7 @@ package com.system.alecsys.truck_fuel.data
 
 import com.google.gson.annotations.SerializedName
 
-data class TruckFuelLogRequest(
+data class TruckFuelConsumptionRequest(
 
 	@field:SerializedName("volume")
 	val volume: Any,
@@ -19,8 +19,8 @@ data class TruckFuelLogRequest(
 	@field:SerializedName("error_log")
 	val errorLog: String,
 
-	@field:SerializedName("station_id")
-	val stationId: String,
+	@field:SerializedName("fuel_station_id")
+	val fuelStationId: String,
 
 	@field:SerializedName("fuel_operator_id")
 	val fuelOperatorId: String,

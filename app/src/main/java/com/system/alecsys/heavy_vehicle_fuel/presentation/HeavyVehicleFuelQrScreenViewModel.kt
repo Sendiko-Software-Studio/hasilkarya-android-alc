@@ -207,7 +207,7 @@ class HeavyVehicleFuelQrScreenViewModel @Inject constructor(
         val data = HeavyVehicleFuelRequest(
             heavyVehicleId = heavyVehicleEntity.heavyVehicleId,
             driverId = heavyVehicleEntity.driverId,
-            stationId = heavyVehicleEntity.stationId,
+            fuelStationId = heavyVehicleEntity.stationId,
             fuelOperatorId = heavyVehicleEntity.gasOperatorId,
             volume = heavyVehicleEntity.volume,
             hourmeter = heavyVehicleEntity.hourmeter,
