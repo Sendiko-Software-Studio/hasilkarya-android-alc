@@ -7,15 +7,15 @@ plugins {
 }
 
 android {
-    namespace = "com.system.hasilkarya"
+    namespace = "com.system.alecsys"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.system.hasilkarya"
+        applicationId = "com.system.alecsys"
         minSdk = 24
         targetSdk = 34
         versionCode = 8
-        versionName = "1.35r"
+        versionName = "alc-1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
