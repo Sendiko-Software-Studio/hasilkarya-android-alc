@@ -17,7 +17,7 @@ import com.system.alecsys.material.data.PostMaterialResponse
 import com.system.alecsys.material.data.PostToLogResponse
 import com.system.alecsys.profile.data.LogoutResponse
 import com.system.alecsys.station.data.GetStationResponse
-import com.system.alecsys.truck_fuel.data.TruckFuelLogRequest
+import com.system.alecsys.truck_fuel.data.TruckFuelConsumptionRequest
 import com.system.alecsys.truck_fuel.data.TruckFuelLogResponse
 import com.system.alecsys.truck_fuel.data.TruckFuelRequest
 import com.system.alecsys.truck_fuel.data.TruckFuelResponse
@@ -53,7 +53,7 @@ interface ApiServices {
         @Header("Authorization") token: String
     ): Call<CheckTruckIdResponse>
 
-    @GET("station/check-availability/gas/{id}")
+    @GET("fuel-station/check-availability/{id}")
     fun checkGasStationId(
         @Path("id") stationId: String,
         @Header("Authorization") token: String
@@ -76,7 +76,7 @@ interface ApiServices {
         @Body request: PostMaterialLogRequest
     ): Call<PostToLogResponse>
 
-    @POST("gas-operator/fuel-log/truck/store")
+    @POST("fuel-consumption/truck")
     fun postFuelTruck(
         @Header("Authorization") token: String,
         @Body truckFuelRequest: TruckFuelRequest
@@ -85,10 +85,10 @@ interface ApiServices {
     @POST("fuel-consumption/truck")
     fun postFuelLog(
         @Header("Authorization") token: String,
-        @Body truckFuelLogRequest: TruckFuelLogRequest
+        @Body truckFuelLogRequest: TruckFuelConsumptionRequest
     ): Call<TruckFuelLogResponse>
 
-    @POST("gas-operator/fuel-log/heavy-vehicle/store")
+    @POST("fuel-consumption/heavy-vehicle")
     fun postFuelHeavyVehicle(
         @Header("Authorization") token: String,
         @Body heavyVehicleFuelRequest: HeavyVehicleFuelRequest
