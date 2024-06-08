@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.system.alecsys"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 8
         versionName = "alc-1.0.0"
