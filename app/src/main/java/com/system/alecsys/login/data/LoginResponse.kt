@@ -19,23 +19,26 @@ data class LoginResponse(
 
 data class UserData(
 
+	@field:SerializedName("role")
+	val role: String,
+
 	@field:SerializedName("updated_at")
 	val updatedAt: String,
 
-	@field:SerializedName("user_id")
-	val userId: String,
+	@field:SerializedName("permissions")
+	val permissions: List<String>,
 
-	@field:SerializedName("user_name")
-	val userName: String,
+	@field:SerializedName("fuel_operator_id")
+	val fuelOperatorId: String,
 
-	@field:SerializedName("roles")
-	val roles: List<String>,
+	@field:SerializedName("name")
+	val name: String,
 
 	@field:SerializedName("created_at")
 	val createdAt: String,
 
 	@field:SerializedName("email_verified_at")
-	val emailVerifiedAt: Any,
+	val emailVerifiedAt: String,
 
 	@field:SerializedName("id")
 	val id: String,

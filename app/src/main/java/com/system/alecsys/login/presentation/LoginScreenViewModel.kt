@@ -62,12 +62,12 @@ class LoginScreenViewModel @Inject constructor(
                 ) {
                     _state.update { it.copy(isLoading = false) }
                     when (response.code()) {
-                        201 -> viewModelScope.launch {
-                            repository.setName(response.body()!!.userData.userName)
+                        200 -> viewModelScope.launch {
                             repository.setEmail(response.body()!!.userData.email)
                             repository.setToken(response.body()!!.token)
-                            repository.setUserId(response.body()!!.userData.userId)
-                            repository.setRole(response.body()!!.userData.roles[0])
+                            repository.setName(response.body()!!.userData.name)
+                            repository.setUserId(response.body()!!.userData.fuelOperatorId)
+                            repository.setRole(response.body()!!.userData.role)
                             repository.setPassword(state.value.passwordText)
                             _state.update {
                                 it.copy(isLoginSuccessful = true)
