@@ -19,8 +19,8 @@ data class TruckFuelRequest(
 	@field:SerializedName("station_id")
 	val stationId: String,
 
-	@field:SerializedName("gas_operator_id")
-	val gasOperatorId: String,
+	@field:SerializedName("fuel_operator_id")
+	val fuelOperatorId: String,
 
 	@field:SerializedName("remarks")
 	val remarks: String,

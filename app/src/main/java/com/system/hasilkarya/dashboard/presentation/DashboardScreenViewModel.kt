@@ -1,6 +1,5 @@
 package com.system.hasilkarya.dashboard.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.system.hasilkarya.core.entities.FuelHeavyVehicleEntity
@@ -33,7 +32,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -365,7 +363,7 @@ class DashboardScreenViewModel @Inject constructor(
             stationId = fuelTruckEntity.stationId,
             volume = fuelTruckEntity.volume,
             odometer = fuelTruckEntity.odometer,
-            gasOperatorId = fuelTruckEntity.userId,
+            fuelOperatorId = fuelTruckEntity.userId,
             remarks = fuelTruckEntity.remarks,
             date = fuelTruckEntity.date
         )
@@ -444,7 +442,7 @@ class DashboardScreenViewModel @Inject constructor(
                 stationId = fuelTruckEntity.stationId,
                 volume = fuelTruckEntity.volume,
                 odometer = fuelTruckEntity.odometer,
-                gasOperatorId = fuelTruckEntity.userId,
+                fuelOperatorId = fuelTruckEntity.userId,
                 errorLog = message,
                 remarks = fuelTruckEntity.remarks,
                 date = fuelTruckEntity.date
@@ -497,7 +495,7 @@ class DashboardScreenViewModel @Inject constructor(
             heavyVehicleId = heavyVehicleEntity.heavyVehicleId,
             driverId = heavyVehicleEntity.driverId,
             stationId = heavyVehicleEntity.stationId,
-            gasOperatorId = heavyVehicleEntity.gasOperatorId,
+            fuelOperatorId = heavyVehicleEntity.gasOperatorId,
             volume = heavyVehicleEntity.volume,
             hourmeter = heavyVehicleEntity.hourmeter,
             remarks = heavyVehicleEntity.remarks,

@@ -195,7 +195,7 @@ class TruckFuelQrScreenViewModel @Inject constructor(
             stationId = fuelTruckEntity.stationId,
             volume = fuelTruckEntity.volume,
             odometer = fuelTruckEntity.odometer,
-            gasOperatorId = fuelTruckEntity.userId,
+            fuelOperatorId = fuelTruckEntity.userId,
             remarks = fuelTruckEntity.remarks,
             date = fuelTruckEntity.date
         )
