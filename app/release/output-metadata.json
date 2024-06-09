@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.system.hasilkarya",
+  "applicationId": "com.system.alecsys",
   "variantName": "release",
   "elements": [
     {
@@ -12,8 +12,8 @@
       "filters": [],
       "attributes": [],
       "versionCode": 8,
-      "versionName": "1.35r",
-      "outputFile": "sistem.hasil.karya.1_35r.apk"
+      "versionName": "alc-1.0.0",
+      "outputFile": "com.sistem.alecsys.v_1.1apk"
     }
   ],
   "elementType": "File",
@@ -33,5 +33,5 @@
       ]
     }
   ],
-  "minSdkVersionForDexing": 24
+  "minSdkVersionForDexing": 26
 }
