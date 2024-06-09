@@ -134,11 +134,8 @@ fun DashboardScreen(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             content = {
                 item {
-                    if (state.isUploading || state.isConnecting) {
-                        LinearProgressIndicator(
-                            strokeCap = StrokeCap.Round,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                    AnimatedVisibility(visible = state.isConnecting || state.isUploading) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                     }
                 }
                 item {
