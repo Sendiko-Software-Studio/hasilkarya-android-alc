@@ -34,16 +34,11 @@ import javax.inject.Inject
 @HiltViewModel
 class TruckFuelQrScreenViewModel @Inject constructor(
     private val repository: TruckFuelRepository,
-    connectionObserver: NetworkConnectivityObserver
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TruckFuelQrScreenState())
     private val _userId = repository.getUserId()
     private val _token = repository.getToken()
-    val _connectionStatus =
-        combine(connectionObserver.observe(), _state) { connectionStatus, state ->
-            state.copy(connectionStatus = connectionStatus)
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TruckFuelQrScreenState())
 
     val state = combine(_userId, _token, _state) { userId, token, state ->
         state.copy(token = token, userId = userId)
@@ -187,7 +182,7 @@ class TruckFuelQrScreenViewModel @Inject constructor(
         )
     }
 
-    private fun postTruckFuel(fuelTruckEntity: FuelTruckEntity, connectionStatus: Status) {
+    private fun postTruckFuel(fuelTruckEntity: FuelTruckEntity) {
         val token = "Bearer ${state.value.token}"
         val data = TruckFuelRequest(
             truckId = fuelTruckEntity.truckId,
@@ -200,53 +195,43 @@ class TruckFuelQrScreenViewModel @Inject constructor(
             date = fuelTruckEntity.date
         )
         val request = repository.postFuels(token, data)
-        if (connectionStatus == Status.Available) {
-            _state.update { it.copy(isLoading = true) }
-            request.enqueue(
-                object : Callback<TruckFuelResponse> {
-                    override fun onResponse(
-                        call: Call<TruckFuelResponse>,
-                        response: Response<TruckFuelResponse>
-                    ) {
-                        _state.update { it.copy(isLoading = false) }
-                        when (response.code()) {
-                            201 -> _state.update {
-                                it.copy(
-                                    isPostSuccessful = true,
-                                    notificationMessage = "Data tersimpan!"
-                                )
-                            }
-
-                            else -> _state.update {
-                                it.copy(
-                                    isRequestFailed = FailedRequest(isFailed = true),
-                                    notificationMessage = "Ups! Terjadi kesalahan."
-                                )
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<TruckFuelResponse>, t: Throwable) {
-                        viewModelScope.launch { repository.saveFuel(fuelTruckEntity) }
-                        _state.update {
+        _state.update { it.copy(isLoading = true) }
+        request.enqueue(
+            object : Callback<TruckFuelResponse> {
+                override fun onResponse(
+                    call: Call<TruckFuelResponse>,
+                    response: Response<TruckFuelResponse>
+                ) {
+                    _state.update { it.copy(isLoading = false) }
+                    when (response.code()) {
+                        201 -> _state.update {
                             it.copy(
                                 isPostSuccessful = true,
                                 notificationMessage = "Data tersimpan!"
                             )
                         }
-                    }
 
+                        else -> _state.update {
+                            it.copy(
+                                isRequestFailed = FailedRequest(isFailed = true),
+                                notificationMessage = "Ups! Terjadi kesalahan."
+                            )
+                        }
+                    }
                 }
-            )
-        } else {
-            viewModelScope.launch { repository.saveFuel(fuelTruckEntity) }
-            _state.update {
-                it.copy(
-                    isPostSuccessful = true,
-                    notificationMessage = "Data tersimpan!"
-                )
+
+                override fun onFailure(call: Call<TruckFuelResponse>, t: Throwable) {
+                    viewModelScope.launch { repository.saveFuel(fuelTruckEntity) }
+                    _state.update {
+                        it.copy(
+                            isPostSuccessful = true,
+                            notificationMessage = "Data tersimpan!"
+                        )
+                    }
+                }
+
             }
-        }
+        )
     }
 
     // state related methods
@@ -256,39 +241,25 @@ class TruckFuelQrScreenViewModel @Inject constructor(
         }
     }
 
-    private fun onTruckIdRegistered(truckId: String, connectionStatus: Status) {
-        if (connectionStatus == Status.Available) {
+    private fun onTruckIdRegistered(truckId: String) {
+        if (state.value.truckId.isEmpty()) {
             checkTruckId(truckId)
-        } else viewModelScope.launch {
-            _state.update {
-                it.copy(truckId = truckId)
-            }
-            delay(1000)
-            _state.update {it.copy(currentlyScanning = ScanOptions.Driver) }
         }
     }
 
-    private fun onDriverIdRegistered(driverId: String, connectionStatus: Status) {
-        if (connectionStatus == Status.Available) {
+    private fun onDriverIdRegistered(driverId: String) {
+        if (state.value.driverId.isEmpty()) {
             checkDriverId(driverId)
-        } else viewModelScope.launch {
-            _state.update { it.copy(driverId = driverId) }
-            delay(1000)
-            _state.update {it.copy(currentlyScanning = ScanOptions.Pos) }
         }
     }
 
-    private fun onStationIdRegistered(stationId: String, connectionStatus: Status) {
-        if (connectionStatus == Status.Available) {
+    private fun onStationIdRegistered(stationId: String) {
+        if (state.value.stationId.isEmpty()) {
             checkStationId(stationId)
-        } else viewModelScope.launch {
-            _state.update { it.copy(stationId = stationId) }
-            delay(1000)
-            _state.update {it.copy(currentlyScanning = ScanOptions.Volume) }
         }
     }
 
-    private fun onVolumeRegistered(volume: Double?){
+    private fun onVolumeRegistered(volume: Double?) {
         if (volume == null) {
             _state.update { it.copy(notificationMessage = "Maaf, Qr invalid.") }
         } else {
@@ -320,9 +291,8 @@ class TruckFuelQrScreenViewModel @Inject constructor(
         it.copy(notificationMessage = "")
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun saveTruckFuelTransaction(connectionStatus: Status) {
-        if (state.value.odometer.isEmpty()){
+    private fun saveTruckFuelTransaction() {
+        if (state.value.odometer.isEmpty()) {
             _state.update {
                 it.copy(
                     odometerErrorState = ErrorTextField(
@@ -333,16 +303,17 @@ class TruckFuelQrScreenViewModel @Inject constructor(
             }
         } else {
             val data = FuelTruckEntity(
-                    truckId = state.value.truckId,
-                    driverId = state.value.driverId,
-                    stationId = state.value.stationId,
-                    volume = state.value.volume,
-                    userId = state.value.userId,
-                    odometer = state.value.odometer.commaToPeriod().toDouble(),
-                    remarks = state.value.remarks,
-                    date = LocalDateTime.now().toString()
-                )
-            postTruckFuel(data, connectionStatus)
+                truckId = state.value.truckId,
+                driverId = state.value.driverId,
+                stationId = state.value.stationId,
+                volume = state.value.volume,
+                userId = state.value.userId,
+                odometer = state.value.odometer.commaToPeriod().toDouble(),
+                remarks = state.value.remarks,
+                date = LocalDateTime.now().toString(),
+                isUploaded = "false"
+            )
+            postTruckFuel(data)
         }
     }
 
@@ -355,11 +326,17 @@ class TruckFuelQrScreenViewModel @Inject constructor(
 
             is TruckFuelQrScreenEvent.OnNavigateForm -> onNavigateForm(event.scanOptions)
 
-            is TruckFuelQrScreenEvent.OnTruckIdRegistered -> onTruckIdRegistered(event.truckId, event.connectionStatus)
+            is TruckFuelQrScreenEvent.OnTruckIdRegistered -> onTruckIdRegistered(
+                event.truckId
+            )
 
-            is TruckFuelQrScreenEvent.OnDriverIdRegistered -> onDriverIdRegistered(event.driverId, event.connectionStatus)
+            is TruckFuelQrScreenEvent.OnDriverIdRegistered -> onDriverIdRegistered(
+                event.driverId
+            )
 
-            is TruckFuelQrScreenEvent.OnStationIdRegistered -> onStationIdRegistered(event.stationId, event.connectionStatus)
+            is TruckFuelQrScreenEvent.OnStationIdRegistered -> onStationIdRegistered(
+                event.stationId
+            )
 
             is TruckFuelQrScreenEvent.OnVolumeRegistered -> onVolumeRegistered(event.volume)
 
@@ -369,7 +346,7 @@ class TruckFuelQrScreenViewModel @Inject constructor(
 
             is TruckFuelQrScreenEvent.OnRemarksChange -> onRemarksChange(event.remarks)
 
-            is TruckFuelQrScreenEvent.SaveTruckFuelTransaction -> saveTruckFuelTransaction(event.connectionStatus)
+            is TruckFuelQrScreenEvent.SaveTruckFuelTransaction -> saveTruckFuelTransaction()
 
         }
     }

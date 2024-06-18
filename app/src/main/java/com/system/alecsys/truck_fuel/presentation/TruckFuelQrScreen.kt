@@ -23,7 +23,6 @@ import kotlinx.coroutines.delay
 fun TruckFuelQrScreen(
     state: TruckFuelQrScreenState,
     onEvent: (TruckFuelQrScreenEvent) -> Unit,
-    connectionStatus: Status,
     onNavigateBack: (destination: Any) -> Unit,
 ) {
     val context = LocalContext.current
@@ -58,12 +57,7 @@ fun TruckFuelQrScreen(
                     ) {
                         QrScanComponent(
                             onResult = {
-                                onEvent(
-                                    TruckFuelQrScreenEvent.OnTruckIdRegistered(
-                                        it,
-                                        connectionStatus
-                                    )
-                                )
+                                onEvent(TruckFuelQrScreenEvent.OnTruckIdRegistered(it))
                             },
                             navigateBack = { onNavigateBack(DashboardScreen) },
                             title = "Truck",
@@ -77,14 +71,15 @@ fun TruckFuelQrScreen(
                     ) {
                         QrScanComponent(
                             onResult = {
+                                onEvent(TruckFuelQrScreenEvent.OnDriverIdRegistered(it))
+                            },
+                            navigateBack = {
                                 onEvent(
-                                    TruckFuelQrScreenEvent.OnDriverIdRegistered(
-                                        it,
-                                        connectionStatus
+                                    TruckFuelQrScreenEvent.OnNavigateForm(
+                                        ScanOptions.Truck
                                     )
                                 )
                             },
-                            navigateBack = { onEvent(TruckFuelQrScreenEvent.OnNavigateForm(ScanOptions.Truck)) },
                             title = "Driver",
                             isValid = state.driverId.isNotBlank()
                         )
@@ -96,14 +91,15 @@ fun TruckFuelQrScreen(
                     ) {
                         QrScanComponent(
                             onResult = {
+                                onEvent(TruckFuelQrScreenEvent.OnStationIdRegistered(it))
+                            },
+                            navigateBack = {
                                 onEvent(
-                                    TruckFuelQrScreenEvent.OnStationIdRegistered(
-                                        it,
-                                        connectionStatus
+                                    TruckFuelQrScreenEvent.OnNavigateForm(
+                                        ScanOptions.Driver
                                     )
                                 )
                             },
-                            navigateBack = { onEvent(TruckFuelQrScreenEvent.OnNavigateForm(ScanOptions.Driver)) },
                             title = "Pos",
                             isValid = state.stationId.isNotBlank()
                         )
@@ -115,7 +111,13 @@ fun TruckFuelQrScreen(
                     ) {
                         QrScanComponent(
                             onResult = { onEvent(TruckFuelQrScreenEvent.OnVolumeRegistered(it.toDoubleOrNull())) },
-                            navigateBack = { onEvent(TruckFuelQrScreenEvent.OnNavigateForm(ScanOptions.Pos)) },
+                            navigateBack = {
+                                onEvent(
+                                    TruckFuelQrScreenEvent.OnNavigateForm(
+                                        ScanOptions.Pos
+                                    )
+                                )
+                            },
                             title = "Jumlah BBM",
                             isValid = state.volume != 0.0
                         )
@@ -132,9 +134,7 @@ fun TruckFuelQrScreen(
                             onNavigateBack = { onEvent(TruckFuelQrScreenEvent.OnNavigateForm(it)) },
                             onSubmit = {
                                 onEvent(
-                                    TruckFuelQrScreenEvent.SaveTruckFuelTransaction(
-                                        connectionStatus
-                                    )
+                                    TruckFuelQrScreenEvent.SaveTruckFuelTransaction
                                 )
                             }
                         )

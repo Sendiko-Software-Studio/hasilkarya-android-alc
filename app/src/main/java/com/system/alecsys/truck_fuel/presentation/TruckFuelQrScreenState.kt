@@ -12,7 +12,6 @@ data class TruckFuelQrScreenState(
     val isLoading: Boolean = false,
     val isPostSuccessful: Boolean = false,
     val isRequestFailed: FailedRequest = FailedRequest(),
-    val connectionStatus: Status = Status.UnAvailable,
     val currentlyScanning: ScanOptions = ScanOptions.Truck,
     val truckId: String = "",
     val driverId: String = "",
