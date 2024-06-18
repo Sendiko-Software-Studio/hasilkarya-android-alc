@@ -15,6 +15,7 @@ import com.system.alecsys.core.navigation.DashboardScreen
 import com.system.alecsys.core.network.Status
 import com.system.alecsys.core.ui.components.ContentBoxWithNotification
 import com.system.alecsys.dashboard.presentation.component.ScanOptions
+import com.system.alecsys.heavy_vehicle_fuel.presentation.HeavyVehicleFuelQrScreenEvent
 import com.system.alecsys.qr.presentation.QrScanComponent
 import kotlinx.coroutines.delay
 
@@ -25,12 +26,12 @@ fun TruckFuelQrScreen(
     onEvent: (TruckFuelQrScreenEvent) -> Unit,
     onNavigateBack: (destination: Any) -> Unit,
 ) {
-    val context = LocalContext.current
     LaunchedEffect(
-        key1 = state,
+        key1 = state.notificationMessage,
+        key2 = state.isPostSuccessful,
         block = {
             if (state.notificationMessage.isNotBlank()) {
-                delay(2000)
+                delay(1000)
                 onEvent(TruckFuelQrScreenEvent.NotificationClear)
             }
 
@@ -40,6 +41,7 @@ fun TruckFuelQrScreen(
             }
         }
     )
+
     ContentBoxWithNotification(
         message = state.notificationMessage,
         isLoading = state.isLoading,
