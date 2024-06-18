@@ -2,72 +2,8 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "9d0a8b6a306b3927707a24399a7733bb",
+    "identityHash": "f1b579fb845c15c6e9a0eb3f743d611b",
     "entities": [
-      {
-        "tableName": "material",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL DEFAULT 0, `truckId` TEXT NOT NULL, `driverId` TEXT NOT NULL, `stationId` TEXT NOT NULL, `checkerId` TEXT NOT NULL, `ratio` REAL NOT NULL, `remarks` TEXT NOT NULL, `date` TEXT NOT NULL DEFAULT '0')",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
-          },
-          {
-            "fieldPath": "truckId",
-            "columnName": "truckId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "driverId",
-            "columnName": "driverId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "stationId",
-            "columnName": "stationId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "checkerId",
-            "columnName": "checkerId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ratio",
-            "columnName": "ratio",
-            "affinity": "REAL",
-            "notNull": true
-          },
-          {
-            "fieldPath": "remarks",
-            "columnName": "remarks",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "date",
-            "columnName": "date",
-            "affinity": "TEXT",
-            "notNull": true,
-            "defaultValue": "'0'"
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": true,
-          "columnNames": [
-            "id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
       {
         "tableName": "fuel_truck",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL DEFAULT 0, `truckId` TEXT NOT NULL, `driverId` TEXT NOT NULL, `stationId` TEXT NOT NULL, `userId` TEXT NOT NULL, `volume` REAL NOT NULL, `odometer` REAL NOT NULL, `remarks` TEXT NOT NULL, `date` TEXT NOT NULL DEFAULT '0')",
@@ -267,7 +203,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9d0a8b6a306b3927707a24399a7733bb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f1b579fb845c15c6e9a0eb3f743d611b')"
     ]
   }
 }
