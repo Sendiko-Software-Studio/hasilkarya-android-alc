@@ -2,11 +2,6 @@ package com.system.alecsys.dashboard.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.system.alecsys.core.network.NetworkConnectivityObserver
-import com.system.alecsys.core.network.Status
-import com.system.alecsys.core.repositories.fuel.heavy_vehicle.HeavyVehicleFuelRepository
-import com.system.alecsys.core.repositories.fuel.truck.TruckFuelRepository
-import com.system.alecsys.core.repositories.station.StationRepository
 import com.system.alecsys.core.repositories.user.UserRepository
 import com.system.alecsys.core.ui.utils.FailedRequest
 import com.system.alecsys.dashboard.data.CheckTokenResponse
