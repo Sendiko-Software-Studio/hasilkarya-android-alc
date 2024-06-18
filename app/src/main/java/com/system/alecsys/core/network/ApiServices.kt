@@ -11,12 +11,7 @@ import com.system.alecsys.heavy_vehicle_fuel.data.HeavyVehicleFuelResponse
 import com.system.alecsys.heavy_vehicle_fuel.data.HeavyVehicleLogResponse
 import com.system.alecsys.login.data.LoginRequest
 import com.system.alecsys.login.data.LoginResponse
-import com.system.alecsys.material.data.PostMaterialLogRequest
-import com.system.alecsys.material.data.PostMaterialRequest
-import com.system.alecsys.material.data.PostMaterialResponse
-import com.system.alecsys.material.data.PostToLogResponse
-import com.system.alecsys.profile.data.LogoutResponse
-import com.system.alecsys.station.data.GetStationResponse
+import com.system.alecsys.settings.data.LogoutResponse
 import com.system.alecsys.truck_fuel.data.TruckFuelConsumptionRequest
 import com.system.alecsys.truck_fuel.data.TruckFuelLogResponse
 import com.system.alecsys.truck_fuel.data.TruckFuelRequest
@@ -34,12 +29,6 @@ interface ApiServices {
     fun login(
         @Body request: LoginRequest
     ): Call<LoginResponse>
-
-    @POST("checker/material-movement/store")
-    fun postMaterial(
-        @Header("Authorization") token: String,
-        @Body request: PostMaterialRequest
-    ): Call<PostMaterialResponse>
 
     @GET("driver/check-availability/{id}")
     fun checkDriverId(
@@ -59,22 +48,10 @@ interface ApiServices {
         @Header("Authorization") token: String
     ): Call<CheckStationIdResponse>
 
-    @GET("station/check-availability/mine/{id}")
-    fun checkMineStationId(
-        @Path("id") stationId: String,
-        @Header("Authorization") token: String
-    ): Call<CheckStationIdResponse>
-
     @POST("logout")
     fun logout(
         @Header("Authorization") token: String
     ): Call<LogoutResponse>
-
-    @POST("checker/material-movement-error-log/store")
-    fun postToLog(
-        @Header("Authorization") token: String,
-        @Body request: PostMaterialLogRequest
-    ): Call<PostToLogResponse>
 
     @POST("fuel-consumption/truck")
     fun postFuelTruck(
@@ -105,12 +82,6 @@ interface ApiServices {
         @Path("id") heavyVehicleId: String,
         @Header("Authorization") token: String
     ): Call<CheckHeavyVehicleIdResponse>
-
-    @GET("checker/station/{id}")
-    fun getStation(
-        @Path("id") stationId: String,
-        @Header("Authorization") token: String
-    ): Call<GetStationResponse>
 
     @GET("me")
     fun checkToken(
