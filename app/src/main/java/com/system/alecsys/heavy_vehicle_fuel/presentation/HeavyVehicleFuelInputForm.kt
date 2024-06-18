@@ -60,7 +60,7 @@ fun HeavyVehicleFuelInputForm(
             modifier = Modifier.padding(paddingValues)
         ) {
             Column(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 Text(
                     text = "Isi jumlah hourmeter",

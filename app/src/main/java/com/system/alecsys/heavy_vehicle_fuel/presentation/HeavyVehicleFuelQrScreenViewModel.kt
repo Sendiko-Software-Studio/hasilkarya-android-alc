@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.system.alecsys.core.entities.FuelHeavyVehicleEntity
-import com.system.alecsys.core.network.NetworkConnectivityObserver
 import com.system.alecsys.core.network.Status
 import com.system.alecsys.core.repositories.fuel.heavy_vehicle.HeavyVehicleFuelRepository
 import com.system.alecsys.core.ui.utils.ErrorTextField
@@ -34,21 +33,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HeavyVehicleFuelQrScreenViewModel @Inject constructor(
-    private val repository: HeavyVehicleFuelRepository,
-    connectionObserver: NetworkConnectivityObserver
+    private val repository: HeavyVehicleFuelRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HeavyVehicleFuelQrScreenState())
     private val _userId = repository.getUserId()
     private val _token = repository.getToken()
-    val connectionStatus =
-        combine(connectionObserver.observe(), _state) { connectionStatus, state ->
-            state.copy(connectionStatus = connectionStatus)
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            HeavyVehicleFuelQrScreenState()
-        )
     val state = combine(_userId, _token, _state) { userId, token, state ->
         state.copy(
             userId = userId,
@@ -199,10 +189,8 @@ class HeavyVehicleFuelQrScreenViewModel @Inject constructor(
     }
 
     // post data
-    private fun postHeavyVehicleFuel(
-        heavyVehicleEntity: FuelHeavyVehicleEntity,
-        connectionStatus: Status
-    ) {
+    private fun postHeavyVehicleFuel(heavyVehicleEntity: FuelHeavyVehicleEntity) {
+        _state.update { it.copy(isLoading = true) }
         val token = "Bearer ${state.value.token}"
         val data = HeavyVehicleFuelRequest(
             heavyVehicleId = heavyVehicleEntity.heavyVehicleId,
@@ -214,54 +202,43 @@ class HeavyVehicleFuelQrScreenViewModel @Inject constructor(
             remarks = heavyVehicleEntity.remarks,
             date = heavyVehicleEntity.date
         )
-        if (connectionStatus == Status.Available) {
-            _state.update { it.copy(isLoading = true) }
-            val request = repository.postHeavyVehicleFuel(token, data)
-            request.enqueue(
-                object : Callback<HeavyVehicleFuelResponse> {
-                    override fun onResponse(
-                        call: Call<HeavyVehicleFuelResponse>,
-                        response: Response<HeavyVehicleFuelResponse>
-                    ) {
-                        _state.update { it.copy(isLoading = false) }
-                        when (response.code()) {
-                            201 -> _state.update {
-                                it.copy(
-                                    isPostSuccessful = true,
-                                    notificationMessage = "Data berhasil disimpan!"
-                                )
-                            }
-
-                            else -> viewModelScope.launch {
-                                repository.storeHeavyVehicleFuel(heavyVehicleEntity)
-                                _state.update { it.copy(notificationMessage = "Data berhasil disimpan!") }
-                            }
+        val request = repository.postHeavyVehicleFuel(token, data)
+        request.enqueue(
+            object : Callback<HeavyVehicleFuelResponse> {
+                override fun onResponse(
+                    call: Call<HeavyVehicleFuelResponse>,
+                    response: Response<HeavyVehicleFuelResponse>
+                ) {
+                    _state.update { it.copy(isLoading = false) }
+                    when (response.code()) {
+                        201 -> _state.update {
+                            it.copy(
+                                isPostSuccessful = true,
+                                notificationMessage = "Data berhasil disimpan!"
+                            )
                         }
-                    }
 
-                    override fun onFailure(call: Call<HeavyVehicleFuelResponse>, t: Throwable) {
-                        viewModelScope.launch {
+                        else -> viewModelScope.launch {
                             repository.storeHeavyVehicleFuel(heavyVehicleEntity)
-                            _state.update {
-                                it.copy(
-                                    notificationMessage = "Data berhasil disimpan!",
-                                    isPostSuccessful = true,
-                                    isLoading = false
-                                )
-                            }
+                            _state.update { it.copy(notificationMessage = "Data berhasil disimpan!") }
                         }
                     }
                 }
-            )
-        } else viewModelScope.launch {
-            repository.storeHeavyVehicleFuel(heavyVehicleEntity)
-            _state.update {
-                it.copy(
-                    notificationMessage = "Data berhasil disimpan!",
-                    isPostSuccessful = true
-                )
+
+                override fun onFailure(call: Call<HeavyVehicleFuelResponse>, t: Throwable) {
+                    viewModelScope.launch {
+                        repository.storeHeavyVehicleFuel(heavyVehicleEntity)
+                        _state.update {
+                            it.copy(
+                                notificationMessage = "Data berhasil disimpan!",
+                                isPostSuccessful = true,
+                                isLoading = false
+                            )
+                        }
+                    }
+                }
             }
-        }
+        )
     }
 
     // state related methods
@@ -269,33 +246,21 @@ class HeavyVehicleFuelQrScreenViewModel @Inject constructor(
         _state.update { it.copy(currentlyScanning = scanOptions) }
     }
 
-    private fun onHeavyVehicleIdRegistered(vHId: String, connectionStatus: Status) {
-        if (connectionStatus == Status.Available) {
+    private fun onHeavyVehicleIdRegistered(vHId: String) {
+        if (state.value.heavyVehicleId.isBlank()) {
             checkHeavyVehicleId(vHId)
-        } else viewModelScope.launch {
-            _state.update { it.copy(heavyVehicleId = vHId) }
-            delay(1000)
-            _state.update { it.copy(currentlyScanning = ScanOptions.Driver) }
         }
     }
 
-    private fun onDriverIdRegistered(driverId: String, connectionStatus: Status) {
-        if (connectionStatus == Status.Available) {
+    private fun onDriverIdRegistered(driverId: String) {
+        if (state.value.driverId.isBlank()) {
             checkDriverId(driverId)
-        } else viewModelScope.launch {
-            _state.update { it.copy(driverId = driverId) }
-            delay(1000)
-            _state.update { it.copy(currentlyScanning = ScanOptions.Pos) }
         }
     }
 
-    private fun onStationIdRegistered(stationId: String, connectionStatus: Status) {
-        if (connectionStatus == Status.Available) {
+    private fun onStationIdRegistered(stationId: String) {
+        if (state.value.stationId.isBlank()) {
             checkStationId(stationId)
-        } else viewModelScope.launch {
-            _state.update { it.copy(stationId = stationId) }
-            delay(1000)
-            _state.update { it.copy(currentlyScanning = ScanOptions.Volume) }
         }
     }
 
@@ -340,8 +305,7 @@ class HeavyVehicleFuelQrScreenViewModel @Inject constructor(
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun saveHeavyVehicleFuelTransaction(connectionStatus: Status) {
+    private fun saveHeavyVehicleFuelTransaction() {
         if (state.value.hourmeter.isBlank()) {
             _state.update {
                 it.copy(
@@ -362,21 +326,20 @@ class HeavyVehicleFuelQrScreenViewModel @Inject constructor(
                 remarks = state.value.remarks,
                 date = LocalDateTime.now().toString()
             )
-            postHeavyVehicleFuel(data, connectionStatus)
+            postHeavyVehicleFuel(data)
         }
     }
 
     // event handler
-    @RequiresApi(Build.VERSION_CODES.O)
     fun onEvent(event: HeavyVehicleFuelQrScreenEvent) {
         when (event) {
             is HeavyVehicleFuelQrScreenEvent.OnNavigateForm -> onNavigateForm(event.scanOptions)
 
-            is HeavyVehicleFuelQrScreenEvent.OnHeavyVehicleIdRegistered -> onHeavyVehicleIdRegistered(event.vHId, event.connectionStatus)
+            is HeavyVehicleFuelQrScreenEvent.OnHeavyVehicleIdRegistered -> onHeavyVehicleIdRegistered(event.vHId)
 
-            is HeavyVehicleFuelQrScreenEvent.OnDriverIdRegistered -> onDriverIdRegistered(event.driverId, event.connectionStatus)
+            is HeavyVehicleFuelQrScreenEvent.OnDriverIdRegistered -> onDriverIdRegistered(event.driverId)
 
-            is HeavyVehicleFuelQrScreenEvent.OnStationIdRegistered -> onStationIdRegistered(event.stationId, event.connectionStatus)
+            is HeavyVehicleFuelQrScreenEvent.OnStationIdRegistered -> onStationIdRegistered(event.stationId)
 
             is HeavyVehicleFuelQrScreenEvent.OnVolumeRegistered -> onVolumeRegistered(event.volume)
 
@@ -390,7 +353,7 @@ class HeavyVehicleFuelQrScreenViewModel @Inject constructor(
 
             HeavyVehicleFuelQrScreenEvent.NotificationClear -> onNotificationClear()
 
-            is HeavyVehicleFuelQrScreenEvent.SaveHeavyVehicleFuelTransaction -> saveHeavyVehicleFuelTransaction(event.connectionStatus)
+            is HeavyVehicleFuelQrScreenEvent.SaveHeavyVehicleFuelTransaction -> saveHeavyVehicleFuelTransaction()
         }
     }
 

@@ -24,15 +24,13 @@ fun HeavyVehicleFuelQrScreen(
     state: HeavyVehicleFuelQrScreenState,
     onEvent: (HeavyVehicleFuelQrScreenEvent) -> Unit,
     onNavigateBack: (destination: Any) -> Unit,
-    connectionStatus: Status
 ) {
-    val context = LocalContext.current
     LaunchedEffect(
         key1 = state.notificationMessage,
         key2 = state.isPostSuccessful,
         block = {
             if (state.notificationMessage.isNotBlank()) {
-                delay(2000)
+                delay(1000)
                 onEvent(HeavyVehicleFuelQrScreenEvent.NotificationClear)
             }
 
@@ -60,10 +58,7 @@ fun HeavyVehicleFuelQrScreen(
                         QrScanComponent(
                             onResult = {
                                 onEvent(
-                                    HeavyVehicleFuelQrScreenEvent.OnHeavyVehicleIdRegistered(
-                                        it,
-                                        connectionStatus
-                                    )
+                                    HeavyVehicleFuelQrScreenEvent.OnHeavyVehicleIdRegistered(it)
                                 )
                             },
                             navigateBack = { onNavigateBack(DashboardScreen) },
@@ -79,10 +74,7 @@ fun HeavyVehicleFuelQrScreen(
                         QrScanComponent(
                             onResult = {
                                 onEvent(
-                                    HeavyVehicleFuelQrScreenEvent.OnDriverIdRegistered(
-                                        it,
-                                        connectionStatus
-                                    )
+                                    HeavyVehicleFuelQrScreenEvent.OnDriverIdRegistered(it)
                                 )
                             },
                             navigateBack = {
@@ -104,10 +96,7 @@ fun HeavyVehicleFuelQrScreen(
                         QrScanComponent(
                             onResult = {
                                 onEvent(
-                                    HeavyVehicleFuelQrScreenEvent.OnStationIdRegistered(
-                                        it,
-                                        connectionStatus
-                                    )
+                                    HeavyVehicleFuelQrScreenEvent.OnStationIdRegistered(it)
                                 )
                             },
                             navigateBack = {
@@ -160,14 +149,20 @@ fun HeavyVehicleFuelQrScreen(
                                 )
                             },
                             onHourmeterClear = { onEvent(HeavyVehicleFuelQrScreenEvent.OnClearHourmeter) },
-                            onRemarksChange = { onEvent(HeavyVehicleFuelQrScreenEvent.OnRemarksChange(it)) },
+                            onRemarksChange = {
+                                onEvent(HeavyVehicleFuelQrScreenEvent.OnRemarksChange(it))
+                            },
                             onRemarksClear = { onEvent(HeavyVehicleFuelQrScreenEvent.OnClearRemarks) },
-                            onNavigateBack = { onEvent(HeavyVehicleFuelQrScreenEvent.OnNavigateForm(it)) },
+                            onNavigateBack = {
+                                onEvent(
+                                    HeavyVehicleFuelQrScreenEvent.OnNavigateForm(
+                                        it
+                                    )
+                                )
+                            },
                             onSubmit = {
                                 onEvent(
-                                    HeavyVehicleFuelQrScreenEvent.SaveHeavyVehicleFuelTransaction(
-                                        connectionStatus
-                                    )
+                                    HeavyVehicleFuelQrScreenEvent.SaveHeavyVehicleFuelTransaction
                                 )
                             }
                         )
