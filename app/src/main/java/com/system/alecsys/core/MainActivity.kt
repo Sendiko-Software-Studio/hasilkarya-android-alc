@@ -13,13 +13,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.system.alecsys.core.navigation.DashboardScreen
-import com.system.alecsys.core.navigation.GasHeavyVehicleScreen
-import com.system.alecsys.core.navigation.GasTruckScreen
+import com.system.alecsys.core.navigation.HeavyVehicleFuelScreen
 import com.system.alecsys.core.navigation.LoginScreen
-import com.system.alecsys.core.navigation.MaterialScreen
-import com.system.alecsys.core.navigation.ProfileScreen
+import com.system.alecsys.core.navigation.SettingsScreen
 import com.system.alecsys.core.navigation.SplashScreen
-import com.system.alecsys.core.navigation.StationScreen
+import com.system.alecsys.core.navigation.TruckFuelScreen
 import com.system.alecsys.core.preferences.ThemeViewModel
 import com.system.alecsys.core.ui.theme.AppTheme.Dark
 import com.system.alecsys.core.ui.theme.AppTheme.Default
@@ -31,14 +29,10 @@ import com.system.alecsys.heavy_vehicle_fuel.presentation.HeavyVehicleFuelQrScre
 import com.system.alecsys.heavy_vehicle_fuel.presentation.HeavyVehicleFuelQrScreenViewModel
 import com.system.alecsys.login.presentation.LoginScreen
 import com.system.alecsys.login.presentation.LoginScreenViewModel
-import com.system.alecsys.material.presentation.MaterialQrScreen
-import com.system.alecsys.material.presentation.MaterialQrScreenViewModel
-import com.system.alecsys.profile.presentation.ProfileScreen
-import com.system.alecsys.profile.presentation.ProfileScreenViewModel
+import com.system.alecsys.settings.presentation.SettingsScreen
+import com.system.alecsys.settings.presentation.SettingsScreenViewModel
 import com.system.alecsys.splash.presentation.SplashScreen
 import com.system.alecsys.splash.presentation.SplashScreenViewModel
-import com.system.alecsys.station.presentation.StationQrScreen
-import com.system.alecsys.station.presentation.StationQrScreenViewModel
 import com.system.alecsys.truck_fuel.presentation.TruckFuelQrScreen
 import com.system.alecsys.truck_fuel.presentation.TruckFuelQrScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -97,22 +91,19 @@ class MainActivity : ComponentActivity() {
                         composable<DashboardScreen>(
                             content = {
                                 val viewModel = hiltViewModel<DashboardScreenViewModel>()
-                                val connectionStatus =
-                                    viewModel.connectionStatus.collectAsState().value.connectionStatus
                                 DashboardScreen(
                                     state = viewModel.state.collectAsState().value,
                                     onEvent = viewModel::onEvent,
-                                    connectionStatus = connectionStatus,
                                     onNavigate = { destination ->
                                         navController.navigate(destination)
                                     }
                                 )
                             }
                         )
-                        composable<MaterialScreen>(
+                        composable<SettingsScreen>(
                             content = {
-                                val viewModel = hiltViewModel<MaterialQrScreenViewModel>()
-                                MaterialQrScreen(
+                                val viewModel = hiltViewModel<SettingsScreenViewModel>()
+                                SettingsScreen(
                                     state = viewModel.state.collectAsState().value,
                                     onEvent = viewModel::onEvent,
                                     onNavigateBack = { destination ->
@@ -127,31 +118,12 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         )
-                        composable<ProfileScreen>(
-                            content = {
-                                val viewModel = hiltViewModel<ProfileScreenViewModel>()
-                                ProfileScreen(
-                                    state = viewModel.state.collectAsState().value,
-                                    onEvent = viewModel::onEvent,
-                                    onNavigateBack = { destination ->
-                                        if (destination == DashboardScreen) {
-                                            navController.popBackStack()
-                                        } else navController.navigate(destination) {
-                                            popUpTo(
-                                                destination,
-                                            ) { inclusive = true }
-                                        }
-                                    }
-                                )
-                            }
-                        )
-                        composable<GasTruckScreen>(
+                        composable<TruckFuelScreen>(
                             content = {
                                 val viewModel = hiltViewModel<TruckFuelQrScreenViewModel>()
                                 TruckFuelQrScreen(
                                     state = viewModel.state.collectAsState().value,
                                     onEvent = viewModel::onEvent,
-                                    connectionStatus = viewModel._connectionStatus.collectAsState().value.connectionStatus,
                                     onNavigateBack = { destination ->
                                         if (destination == DashboardScreen) {
                                             navController.popBackStack()
@@ -162,7 +134,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         )
-                        composable<GasHeavyVehicleScreen>(
+                        composable<HeavyVehicleFuelScreen>(
                             content = {
                                 val viewModel = hiltViewModel<HeavyVehicleFuelQrScreenViewModel>()
                                 HeavyVehicleFuelQrScreen(
@@ -175,20 +147,6 @@ class MainActivity : ComponentActivity() {
                                             popUpTo(destination) { inclusive = true }
                                         }
                                     },
-                                    connectionStatus = viewModel.connectionStatus.collectAsState().value.connectionStatus
-                                )
-                            }
-                        )
-                        composable<StationScreen>(
-                            content = {
-                                val viewModel = hiltViewModel<StationQrScreenViewModel>()
-                                StationQrScreen(
-                                    state = viewModel.state.collectAsState().value,
-                                    connectionStatus = viewModel.state.collectAsState().value.connectionStatus,
-                                    onNavigateBack = {
-                                        navController.popBackStack()
-                                    },
-                                    onEvent = viewModel::onEvent
                                 )
                             }
                         )
