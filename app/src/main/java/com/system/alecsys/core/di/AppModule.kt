@@ -11,13 +11,9 @@ import com.system.alecsys.core.repositories.fuel.heavy_vehicle.HeavyVehicleDao
 import com.system.alecsys.core.repositories.fuel.heavy_vehicle.HeavyVehicleFuelRepository
 import com.system.alecsys.core.repositories.fuel.truck.TruckFuelDao
 import com.system.alecsys.core.repositories.fuel.truck.TruckFuelRepository
-import com.system.alecsys.core.repositories.material.MaterialDao
-import com.system.alecsys.core.repositories.material.MaterialRepository
-import com.system.alecsys.core.repositories.station.StationDao
-import com.system.alecsys.core.repositories.station.StationRepository
 import com.system.alecsys.core.repositories.user.UserRepository
 import com.system.alecsys.login.domain.LoginRepository
-import com.system.alecsys.profile.domain.ProfileRepository
+import com.system.alecsys.settings.domain.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -88,12 +84,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMaterialDao(database: AppDatabase): MaterialDao {
-        return database.materialDao
-    }
-
-    @Provides
-    @Singleton
     fun provideFuelDao(database: AppDatabase): TruckFuelDao {
         return database.truckFuelDao
     }
@@ -102,12 +92,6 @@ object AppModule {
     @Singleton
     fun provideHeavyDao(database: AppDatabase): HeavyVehicleDao {
         return database.heavyVehicleDao
-    }
-
-    @Provides
-    @Singleton
-    fun provideMaterialRepository(dao: MaterialDao, apiServices: ApiServices, preferences: AppPreferences): MaterialRepository {
-        return MaterialRepository(dao, apiServices, preferences)
     }
 
     @Provides
@@ -130,20 +114,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepository(appPreferences: AppPreferences, apiServices: ApiServices): ProfileRepository {
-        return ProfileRepository(appPreferences, apiServices)
-    }
-
-    @Provides
-    @Singleton
-    fun provideStationDao(database: AppDatabase): StationDao {
-        return database.stationDao
-    }
-
-    @Provides
-    @Singleton
-    fun provideStationRepository(dao: StationDao, apiServices: ApiServices): StationRepository {
-        return StationRepository(dao, apiServices)
+    fun provideProfileRepository(appPreferences: AppPreferences, apiServices: ApiServices): SettingsRepository {
+        return SettingsRepository(appPreferences, apiServices)
     }
 
     @Provides
