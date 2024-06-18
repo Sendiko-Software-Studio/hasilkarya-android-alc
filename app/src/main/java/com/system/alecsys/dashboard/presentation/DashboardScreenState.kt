@@ -2,7 +2,6 @@ package com.system.alecsys.dashboard.presentation
 
 import com.system.alecsys.core.entities.FuelHeavyVehicleEntity
 import com.system.alecsys.core.entities.FuelTruckEntity
-import com.system.alecsys.core.entities.MaterialEntity
 import com.system.alecsys.core.entities.StationEntity
 import com.system.alecsys.core.network.Status
 import com.system.alecsys.core.ui.utils.FailedRequest
@@ -16,7 +15,6 @@ data class DashboardScreenState(
     val connectionStatus: Status = Status.UnAvailable,
     val isPostSuccessful: Boolean = false,
     val isRequestFailed: FailedRequest = FailedRequest(),
-    val materials: List<MaterialEntity> = emptyList(),
     val role: String = "",
     val fuels: List<FuelTruckEntity> = emptyList(),
     val heavyFuels: List<FuelHeavyVehicleEntity> = emptyList(),
