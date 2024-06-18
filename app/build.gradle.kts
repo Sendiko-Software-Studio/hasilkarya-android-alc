@@ -14,8 +14,8 @@ android {
         applicationId = "com.system.alecsys"
         minSdk = 26
         targetSdk = 34
-        versionCode = 8
-        versionName = "alc-1.0.0"
+        versionCode = 2
+        versionName = "alc-1.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

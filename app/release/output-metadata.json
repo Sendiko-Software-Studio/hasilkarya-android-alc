@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 8,
-      "versionName": "alc-1.0.0",
-      "outputFile": "com.sistem.alecsys.v_1.1apk"
+      "versionCode": 2,
+      "versionName": "alc-1.1.2",
+      "outputFile": "com.sistem.alecsys_v1.1.2.apk"
     }
   ],
   "elementType": "File",
