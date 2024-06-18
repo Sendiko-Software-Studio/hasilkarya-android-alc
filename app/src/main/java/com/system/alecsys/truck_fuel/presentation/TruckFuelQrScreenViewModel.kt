@@ -311,7 +311,6 @@ class TruckFuelQrScreenViewModel @Inject constructor(
                 odometer = state.value.odometer.commaToPeriod().toDouble(),
                 remarks = state.value.remarks,
                 date = LocalDateTime.now().toString(),
-                isUploaded = "false"
             )
             postTruckFuel(data)
         }
