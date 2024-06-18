@@ -13,16 +13,10 @@ object LoginScreen
 object DashboardScreen
 
 @Serializable
-object MaterialScreen
+object SettingsScreen
 
 @Serializable
-object ProfileScreen
+object TruckFuelScreen
 
 @Serializable
-object GasTruckScreen
-
-@Serializable
-object GasHeavyVehicleScreen
-
-@Serializable
-object StationScreen
+object HeavyVehicleFuelScreen
