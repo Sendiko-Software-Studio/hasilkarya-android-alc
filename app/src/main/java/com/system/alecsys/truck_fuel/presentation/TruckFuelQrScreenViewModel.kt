@@ -1,12 +1,8 @@
 package com.system.alecsys.truck_fuel.presentation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.system.alecsys.core.entities.FuelTruckEntity
-import com.system.alecsys.core.network.NetworkConnectivityObserver
-import com.system.alecsys.core.network.Status
 import com.system.alecsys.core.repositories.fuel.truck.TruckFuelRepository
 import com.system.alecsys.core.ui.utils.ErrorTextField
 import com.system.alecsys.core.ui.utils.FailedRequest
